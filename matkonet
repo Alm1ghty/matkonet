@@ -1,0 +1,512 @@
+//import java.util.*;
+import unit4.collectionsLib.*;
+ 
+public class UsefulMethods
+{
+        /* הערות:
+     * מחלקת עזר זו כוללת פעולות עזר על רשימה, מחסנית, תור ועץ בינארי
+     * לכל פעולה כתובות מעליה (כהערות) טענת הכניסה, טענת היציאה וסיבוכיות זמן הריצה של הפעולה
+     * הערה עם סימן קריאה משמעה פעולה חיצונית שקיימת במחלקת עזר זו - יש לכתוב את הפעולה החיצונית!
+     * רוב הפעולות מקבלות טיפוס נתונים מסוג מספר שלם, אך יכולות לעבוד עם כל טיפוס אחר
+     * © כל הזכויות שמורות לערן - Saurik
+     * לבקשות, הערות והצעות: http://www.fxp.co.il/showthread.php?t=14343465
+     * בהצלחה בבחינות!
+     */
+ 
+ 
+     ///
+     /// רשימה
+     ///
+     //טענת כניסה: הפעולה מקבלת רשימה של מספרים שלמים ומספר שלם
+     // טענת יציאה: הפעולה מחזירה "אמת" אם המספר נמצא ברשימה, אחרת מחזירה "שקר"
+     // סיבוכיות זמן ריצה: O(n)
+     public static boolean isExistList(List<Integer> l, int n)
+     {
+         Node<Integer> pos = l.getFirst();
+         while (pos != null)
+         {
+             if (pos.getInfo() == n)
+                 return true;
+             pos = pos.getNext();
+         }
+         return false;
+     }
+     // טענת כניסה: הפעולה מקבלת רשימה של מספרים שלמים
+     // טענת כניסה: הפעולה מחזירה את סכום כל איברי הרשימה
+     // סיבוכיות זמן ריצה: O(n)
+     public static int sumList(List<Integer> l)
+     {
+         int sum = 0;
+         Node<Integer> pos = l.getFirst();
+         while (pos != null)
+         {
+             sum += pos.getInfo();
+             pos = pos.getNext();
+         }
+         return sum;
+     }
+     // טענת כניסה: הפעולה מקבלת רשימה של מספרים שלמים
+     // טענת יציאה: הפעולה מחזירה את אורך הרשימה - מספר החוליות בה
+     // סיבוכיות זמן ריצה: O(n)
+     public static int lengthList(List<Integer> l)
+     {
+         int length = 0;
+         Node<Integer> pos = l.getFirst();
+         while (pos != null)
+         {
+             length++;
+             pos = pos.getNext();
+         }
+         return length;
+     }
+     // טענת כניסה: הפעולה מקבלת רשימה של מספרים שלמים ומספר שלם
+     // טענת יציאה: הפעולה מוחקת את כל מופעי המספר שהתקבל מהרשימה
+     // סיבוכיות זמן ריצה: O(n)
+     public static void DebugList(List<Integer> l, int n)
+     {
+         Node<Integer> pos = l.getFirst();
+         while (pos != null)
+             if (pos.getInfo() == n)
+                 pos = l.remove(pos);
+             else pos = pos.getNext();
+     }
+     // טענת כניסה: הפעולה מקבלת רשימה של מספרים שלמים ומספר שלם
+     // טענת יציאה: הפעולה מחזירה את מספר הפעמים שהמספר מופיע ברשימה
+     // סיבוכיות זמן ריצה: O(n)
+     public static int howManyList(List<Integer> l, int n)
+     {
+         int count = 0;
+         Node<Integer> pos = l.getFirst();
+         while (pos != null)
+         {
+             if (pos.getInfo() == n)
+                 count++;
+             pos = pos.getNext();
+         }
+         return count;
+     }
+     // טענת כניסה: הפעולה מקבלת רשימה ממוינת של מספרים שלמים ומספר שלם
+     // טענת יציאה: הפעולה מכניסה באופן ממוין את המספר לרשימה
+     // סיבוכיות זמן ריצה: O(n)
+     public static void insertSorted(List<Integer> l, int n)
+     {
+         Node<Integer> pos = l.getFirst();
+         Node<Integer> before = null;
+         while (pos != null && n > pos.getInfo())
+         {
+             before = pos;
+             pos = pos.getNext();
+         }
+         l.insert(before, n);
+     }
+     // טענת כניסה: הפעולה מקבלת רשימה של מספרים שלמים
+     // טענת יציאה: הפעולה מחזירה "אמת" אם הרשימה ממוינת בסדר עולה, אחרת מחזירה "שקר"
+     // סיבוכיות זמן ריצה: O(n)
+     public static boolean isSorted(List<Integer> l)
+     {
+         Node<Integer> pos = l.getFirst();
+         while (pos.getNext() != null)
+         {
+             if (pos.getInfo() > pos.getNext().getInfo())
+                 return false;
+             pos = pos.getNext();
+         }
+         return true;
+     }
+     // טענת כניסה: הפעולה מקבלת רשימה לא ממוינת של מספרים שלמים
+     // טענת יציאה: הפעולה מחזירה רשימה המכילה את כל ערכי הרשימה שהתקבלה בסדר ממוין עולה
+     // סיבוכיות זמן ריצה: O(n²)
+     public static List<Integer> sort(List<Integer> l)
+     {
+         List<Integer> newL = new List<Integer>();
+         Node<Integer> pos = l.getFirst();
+         while (pos != null)
+         {
+             insertSorted(newL, pos.getInfo()); //! //O(n)
+             pos = pos.getNext();
+         }
+         return newL;
+     }
+     ///
+     /// מחסנית
+     ///
+     // טענת כניסה: הפעולה מקבלת מחסנית של מספרים שלמים
+     // טענת יציאה: הפעולה מחזירה מחסנית חדשה, שאיבריה זהים בערכם ובסדרם לאיברי המחסנית שהתקבלה
+     // סיבוכיות זמן ריצה: O(n)
+     public static Stack<Integer> cloneStack(Stack<Integer> s)
+     {
+         Stack<Integer> newS = new Stack<Integer>();
+         Stack<Integer> tmp = new Stack<Integer>();
+         while (!s.isEmpty())
+             tmp.push(s.pop());
+         while (!tmp.isEmpty())
+         {
+             newS.push(tmp.top());
+             s.push(tmp.pop());
+         }
+         return newS;
+     }
+     // טענת כניסה: הפעולה מקבלת מחסנית של מספרים שלמים
+     // טענת יציאה: הפעולה מחזירה מחסנית חדשה, שאיבריה מסודרים בסדר הפוך ביחס לאיברי המחסנית שהתקבלה
+     // סיבוכיות זמן ריצה: O(n)
+     public static Stack<Integer> flipStack(Stack<Integer> s)
+     {
+         Stack<Integer> newS = new Stack<Integer>();
+         Stack<Integer> tmp = cloneStack(s); //!
+         while (!tmp.isEmpty())
+             newS.push(tmp.pop());
+         return newS;
+     }
+     // טענת כניסה: הפעולה מקבלת מחסנית של מספרים שלמים ומספר שלם
+     // טענת יציאה: המחסנית מחזירה "אמת" אם המספר נמצא במחסנית, אחרת מחזירה "שקר"
+     // סיבוכיות זמן ריצה: O(n)
+     public static boolean isExistStack(Stack<Integer> s, int n)
+     {
+         Stack<Integer> sCopy = cloneStack(s); //!
+         while (!sCopy.isEmpty())
+             if (sCopy.pop() == n)
+                 return true;
+         return false;
+     }
+     // טענת כניסה: הפעולה מקבלת מחסנית של מספרים שלמים ומספר שלם
+     // טענת יציאה: הפעולה מחזירה "אמת" אם המספר נמצא במחסנית, אחרת מחזירה "שקר"
+     // הערה: הפעולה רקורסיבית, ועדיין שומרת על סדר המחסנית שהתקבלה
+     // סיבוכיות זמן ריצה: O(n)
+     public static boolean isExistStackRec(Stack<Integer> s, int n)
+     {
+         if (s.isEmpty())
+             return false;
+         int x = s.pop();
+         boolean exists = (x == n || isExistStackRec(s, n));
+         s.push(x); //לאחר הקריאה הרקורסיבית, האיבר שנשלף נדחף בחזרה אל תוך המחסנית
+         return exists;
+     }
+     // טענת כניסה: הפעולה מקבלת מחסנית של מספרים שלמים
+     // טענת יציאה: הפעולה מחזירה את סכום איברי המחסנית
+     // סיבוכיות זמן ריצה: O(n)
+     public static int sumStack(Stack<Integer> s)
+     {
+         int sum = 0;
+         Stack<Integer> sCopy = cloneStack(s); //!
+         while (!sCopy.isEmpty())
+             sum += sCopy.pop();
+         return sum;
+     }
+     // טענת כניסה: הפעולה מקבלת מחסנית של מספרים שלמים
+     // טענת יציאה: הפעולה מחזירה את אורך המחסנית - מספר האיברים בה
+     // סיבוכיות זמן ריצה: O(n)
+     public static int lengthStack(Stack<Integer> s)
+     {
+         int length = 0;
+         Stack<Integer> sCopy = cloneStack(s); //!
+         while (!sCopy.isEmpty())
+         {
+             length++;
+             sCopy.pop();
+         }
+         return length;
+     }
+     // טענת כניסה: הפעולה מקבלת מחסנית של מספרים שלמים ומספר שלם
+     // טענת יציאה: הפעולה מחזירה את מספר הפעמים שהמספר מופיע במחסנית
+     // סיבוכיות זמן ריצה: O(n)
+     public static int howManyStack(Stack<Integer> s, int n)
+     {
+         int count = 0;
+         Stack<Integer> tmp = cloneStack(s); //!
+         while (!tmp.isEmpty())
+             if (tmp.pop() == n)
+                 count++;
+         return count;
+     }
+     // טענת כניסה: הפעולה מקבלת מחסנית של מספרים שלמים ומספר שלם
+     // טענת יציאה: הפעולה מוחקת את כל מופעי המספר שהתקבל מתוך המחסנית
+     // סיבוכיות זמן ריצה: O(n)
+     public static void DebugStack(Stack<Integer> s, int n)
+     {
+         Stack<Integer> tmp = flipStack(s); //!
+         while (!s.isEmpty())
+             s.pop();
+         while (!tmp.isEmpty())
+         {
+             int x = tmp.pop();
+             if (x != n)
+                 s.push(x);
+         }
+     }
+     ///
+     /// תור
+     ///
+     // טענת כניסה: הפעולה מקבלת תור של מספרים שלמים
+     // טענת יציאה: הפעולה מחזירה תור חדש, שאיבריו זהים בערכם ובסדרם לאיברי התור שהתקבל
+     // סיבוכיות זמן ריצה: O(n)
+     public static Queue<Integer> cloneQueue(Queue<Integer> q)
+     {
+         Queue<Integer> newQ = new Queue<Integer>();
+         Queue<Integer> tmp = new Queue<Integer>();
+         while (!q.isEmpty())
+         {
+             newQ.insert(q.head());
+             tmp.insert(q.remove());
+         }
+         while (!tmp.isEmpty())
+             q.insert(tmp.remove());
+         return newQ;
+     }
+     // טענת כניסה: הפעולה מקבלת מחסנית של מספרים שלמים ומספר שלם
+     // טענת יציאה: הפעולה מחזירה "אמת" אם המספר קיים בתור, אחרת מחזירה "שקר"
+     // סיבוכיות זמן ריצה: O(n)
+     public static boolean isExistQueue(Queue<Integer> q, int n)
+     {
+         Queue<Integer> qCopy = cloneQueue(q); //!
+         while (!qCopy.isEmpty())
+             if (qCopy.remove() == n)
+                 return true;
+         return false;
+     }
+     // טענת כניסה: הפעולה מקבלת תור של מספרים שלמים
+     // טענת יציאה: הפעולה מחזירה את סכום איברי התור
+     // סיבוכיות זמן ריצה: O(n)
+     public static int sumQueue(Queue<Integer> q)
+     {
+         int sum = 0;
+         Queue<Integer> qCopy = cloneQueue(q); //!
+         while (!qCopy.isEmpty())
+             sum += qCopy.remove();
+         return sum;
+     }
+     // טענת כניסה: הפעולה מקבלת תור של מספרים שלמים
+     // טענת יציאה: הפעולה מחזירה את אורך התור - מספר האיברים בו
+     // סיבוכיות זמן ריצה: O(n)
+     public static int lengthQueue(Queue<Integer> q)
+     {
+         int length = 0;
+         Queue<Integer> qCopy = cloneQueue(q); //!
+         while (!qCopy.isEmpty())
+         {
+             length++;
+             qCopy.remove();
+         }
+         return length;
+     }
+     // טענת כניסה: הפעולה מקבלת תור של מספרים שלמים ומספר שלם
+     // טענת יציאה: הפעולה מחזירה את מספר הפעמים שהמספר מופיע בתור
+     // סיבוכיות זמן ריצה: O(n)
+     public static int howManyQueue(Queue<Integer> q, int n)
+     {
+         int count = 0;
+         Queue<Integer> tmp = cloneQueue(q); //!
+         while (!tmp.isEmpty())
+             if (tmp.remove() == n)
+                 count++;
+         return count;
+     }
+     // טענת כניסה: הפעולה מקבלת תור של מספרים שלמים ומספר שלם
+     // טענת יציאה: הפעולה מוחקת את כל מופעי המספר שהתקבל מתוך התור
+     // סיבוכיות זמן ריצה: O(n)
+     public static void DebugQueue(Queue<Integer> q, int n)
+     {
+         Queue<Integer> tmp = cloneQueue(q); //!
+         while (!q.isEmpty())
+             q.remove();
+         while (!tmp.isEmpty())
+         {
+             int x = tmp.remove();
+             if (x != n)
+                 q.insert(x);
+         }
+     }
+     ///
+     /// עץ בינארי
+     ///
+     // טענת כניסה: הפעולה מקבלת עץ בינארי של מספרים שלמים
+     // טענת יציאה: הפעולה מחזירה עץ חדש, זהה בדיוק בצמתיו ובמיקומים שלהם לעץ שהתקבל
+     // סיבוכיות זמן ריצה: O(n)
+     public static BinTreeNode<Integer> cloneTree(BinTreeNode<Integer> bt)
+     {
+         if (bt == null)
+             return null;
+         BinTreeNode<Integer> left = cloneTree(bt.getLeft());
+         BinTreeNode<Integer> right = cloneTree(bt.getRight());
+         return new BinTreeNode<Integer>(left, bt.getInfo(), right); //להחליף ימין ושמאל לקבלת עץ מראה
+     }
+     // טענת כניסה: הפעולה מקבלת עץ בינארי של מספרים שלמים ומספר שלם
+     // טענת יציאה: הפעולה מחזירה "אמת" אם המספר שהתקבל נמצא בעץ, אחרת מחזירה "שקר"
+     // סיבוכיות זמן ריצה: O(n)
+     public static boolean isExistTree(BinTreeNode<Integer> bt, int n)
+     {
+         if (bt == null)
+             return false;
+         return (bt.getInfo() == n || isExistTree(bt.getLeft(), n) || isExistTree(bt.getRight(), n));
+     }
+     // טענת כניסה: הפעולה מקבלת עץ בינארי של מספרים שלמים
+     // טענת יציאה: הפעולה מחזירה את סכום ערכי כל הצמתים בעץ
+     // סיבוכיות זמן ריצה: O(n)
+     public static int sumTree(BinTreeNode<Integer> bt)
+     {
+         if (bt == null)
+             return 0;
+         return bt.getInfo() + sumTree(bt.getLeft()) + sumTree(bt.getRight());
+     }
+     // טענת כניסה: הפעולה מקבלת עץ בינארי של מספרים שלמים
+     // טענת יציאה: הפעולה מחזירה "אמת" אם העץ הוא עלה, אחרת מחזירה "שקר"
+     // סיבוכיות זמן ריצה: O(1)
+     public static boolean isLeaf(BinTreeNode<Integer> bt)
+     {
+         return (bt.getLeft() == null && bt.getRight() == null);
+     }
+     // טענת כניסה: הפעולה מקבלת עץ בינארי של מספרים שלמים
+     // טענת יציאה: הפעולה מדפיסה את ערכי הצמתים בעץ לפי סדר תחילי - שורש, שמאל, ימין
+     // סיבוכיות זמן ריצה: O(n)
+     public static void printPreOrder(BinTreeNode<Integer> bt)
+     {
+         if (bt != null)
+         {
+             System.out.println(bt.getInfo());
+             printPreOrder(bt.getLeft());
+             printPreOrder(bt.getRight());
+         }
+     }
+     // טענת כניסה: הפעולה מקבלת עץ בינארי של מספרים שלמים
+     // טענת יציאה: הפעולה מדפיסה את ערכי הצמתים בעץ לפי סדר תוכי - שמאל, שורש, ימין
+     // סיבוכיות זמן ריצה: O(n)
+     public static void printInOrder(BinTreeNode<Integer> bt)
+     {
+         if (bt != null)
+         {
+             printInOrder(bt.getLeft());
+             System.out.println(bt.getInfo());
+             printInOrder(bt.getRight());
+         }
+     }
+     // טענת כניסה: הפעולה מקבלת עץ בינארי של מספרים שלמים
+     // טענת יציאה: הפעולה מדפיסה את ערכי הצמתים בעץ לפי סדר סופי - שמאל, ימין, שורש
+     // סיבוכיות זמן ריצה: O(n)
+     public static void printPostOrder(BinTreeNode<Integer> bt)
+     {
+         if (bt != null)
+         {
+             printPostOrder(bt.getLeft());
+             printPostOrder(bt.getRight());
+             System.out.println(bt.getInfo());
+         }
+     }
+     // טענת כניסה: הפעולה מקבלת עץ בינארי של מספרים שלמים
+     // טענת יציאה: הפעולה מדפיסה את ערכי הצמתים בעץ לפי הרמה שלהם - כל צמתי העץ ברמה כלשהי יודפסו אחד אחרי השני
+     // סיבוכיות זמן ריצה: O(n)
+     public static void printByLevels(BinTreeNode<Integer> bt)
+     {
+         Queue<BinTreeNode<Integer>> q = new Queue<BinTreeNode<Integer>>();
+         q.insert(bt);
+         while (!q.isEmpty())
+         {
+             BinTreeNode<Integer> current = q.remove();
+             System.out.println(current.getInfo());
+             if (current.getLeft() != null)
+                 q.insert(current.getLeft());
+             if (current.getRight() != null)
+                 q.insert(current.getRight());
+         }
+     }
+     // טענת כניסה: הפעולה מקבלת עץ בינארי של מספרים שלמים
+     // טענת יציאה: הפעולה מחזירה את מספר הצמתים בעץ
+     // סיבוכיות זמן ריצה: O(n)
+     public static int countNodes(BinTreeNode<Integer> bt)
+     {
+         if (bt == null)
+             return 0;
+         return 1 + countNodes(bt.getLeft()) + countNodes(bt.getRight());
+     }
+     // טענת כניסה: הפעולה מקבלת עץ בינארי של מספרים שלמים
+     // טענת יציאה: הפעולה מחזירה את מספר העלים בעץ
+     // סיבוכיות זמן ריצה: O(n)
+     public static int countLeaves(BinTreeNode<Integer> bt)
+     {
+         if (bt == null)
+             return 0;
+         if (isLeaf(bt)) //!
+             return 1;
+         return countLeaves(bt.getLeft()) + countLeaves(bt.getRight());
+     }
+     // טענת כניסה: הפעולה מקבלת עץ בינארי של מספרים שלמים
+     // טענת יציאה: הפעולה מחזירה את גובה העץ
+     // סיבוכיות זמן ריצה: O(n)
+     public static int height(BinTreeNode<Integer> bt)
+     {
+         if (bt == null)
+                return -1;
+         return 1 + Math.max(height(bt.getLeft()), height(bt.getRight()));
+     }
+     // טענת כניסה: הפעולה מקבלת עץ בינארי של מספרים שלמים
+     // טענת יציאה: הפעולה מחזירה את הערך הגבוה ביותר בעץ
+     // סיבוכיות זמן ריצה: O(n)
+     public static int maxValue(BinTreeNode<Integer> bt)
+     {
+         if (isLeaf(bt)) //!
+             return bt.getInfo();
+         int maxLeft = maxValue(bt.getLeft());
+         int maxRight = maxValue(bt.getRight());
+         return Math.max(bt.getInfo(), Math.max(maxLeft, maxRight));
+     }
+     // טענת כניסה: הפעולה מקבלת עץ בינארי "בן" ואת הצומת העליון ביותר בעץ כלשהו בו נמצא "בן" - "שורש"
+     // טענת יציאה: הפעולה מחזירה את האב של העץ "בן". אם אביו לא נמצא בעץ "שורש" - יוחזר ערך ריק
+     // סיבוכיות זמן ריצה: O(n)
+     public static BinTreeNode<Integer> getFather(BinTreeNode<Integer> source, BinTreeNode<Integer> son)
+     {
+         if (source == null)
+             return null;
+         if (source.getLeft() == son || source.getRight() == son)
+             return source;
+         BinTreeNode<Integer> left = getFather(source.getLeft(), son);
+         if (left != null)
+             return left;
+         return getFather(source.getRight(), son);
+     }
+     // טענת כניסה: הפעולה מקבלת עץ בינארי של מספרים שלמים ומספר שלם
+     // טענת יציאה: הפעולה מחזירה את מספר הצמתים בהם מופיע הערך שהתקבל
+     // סיבוכיות זמן ריצה: O(n)
+     public static int howManyTree(BinTreeNode<Integer> bt, int n)
+     {
+         if (bt == null)
+             return 0;
+         if (bt.getInfo() == n)
+             return 1 + howManyTree(bt.getLeft(), n) + howManyTree(bt.getRight(), n);
+         return howManyTree(bt.getLeft(), n) + howManyTree(bt.getRight(), n);
+     }
+     // טענת כניסה: הפעולה מקבלת עץ בינארי של מספרים שלמים ומספר שלם המייצג רמה בעץ
+     // טענת יציאה: הפעולה מחזירה את מספר הצמתים ברמה שהתקבלה
+     // סיבוכיות זמן ריצה: O(n)
+     public static int nodesInLevel(BinTreeNode<Integer> bt, int level)
+     {
+         if (bt == null)
+             return 0;
+         if (level == 0)
+             return 1;
+         return nodesInLevel(bt.getLeft(), level - 1) + nodesInLevel(bt.getRight(), level - 1);
+     }
+     // טענת כניסה: הפעולה מקבלת עץ בינארי של מספרים שלמים
+     // טענת יציאה: הפעולה מחזירה "אמת" אם העץ הוא עץ חיפוש בינארי, אחרת מחזירה "שקר"
+     // סיבוכיות זמן ריצה: O(n)
+     public static boolean isBST(BinTreeNode<Integer> bt)
+     {
+         if (bt == null)
+             return true;
+         if (bt.getLeft() != null && bt.getLeft().getInfo() >= bt.getInfo())
+             return false;
+         if (bt.getRight() != null && bt.getRight().getInfo() < bt.getInfo())
+             return false;
+         return isBST(bt.getLeft()) && isBST(bt.getRight());
+     }
+     // טענת כניסה: הפעולה מקבלת עץ בינארי של מספרים שלמים ומספר שלם
+     // טענת יציאה: הפעולה מוסיפה את המספר שהתקבל לעץ החיפוש הבינארי
+     // סיבוכיות זמן ריצה: O(log(n))
+     public static void addToBST(BinTreeNode<Integer> bt, int n)
+     {
+         if (bt.getLeft() == null && n < bt.getInfo())
+             bt.setLeft(new BinTreeNode<Integer>(n));
+         else if (bt.getRight() == null && n >= bt.getInfo())
+             bt.setRight(new BinTreeNode<Integer>(n));
+         else if (n < bt.getInfo())
+             addToBST(bt.getLeft(), n);
+         else addToBST(bt.getRight(), n);
+     }
+}
